@@ -1,0 +1,19 @@
+# 8) Вертикальний обхід бінарного дерева
+def verticalTraversal(root: TreeNode) -> List[List[int]]:
+    nodes: List[Tuple[int,int,int]] = []  # (col, row, val)
+    q = deque([(root, 0, 0)])  # node, row, col
+    while q:
+        node, r, c = q.popleft()
+        if not node: continue
+        nodes.append((c, r, node.val))
+        q.append((node.left, r+1, c-1))
+        q.append((node.right, r+1, c+1))
+    nodes.sort(key=lambda x: (x[0], x[1], x[2]))
+    res: List[List[int]] = []
+    cur_col = None
+    for c, r, v in nodes:
+        if c != cur_col:
+            res.append([]); cur_col = c
+        res[-1].append(v)
+    return res
+# O(n log n) за сортування, пам’ять O(n).
