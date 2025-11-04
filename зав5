@@ -1,0 +1,23 @@
+# 5) Серіалізація/десеріалізація дерева (префіксний обхід із маркером '#')
+class Codec:
+    def serialize(self, root: Optional[TreeNode]) -> str:
+        out = []
+        def dfs(node: Optional[TreeNode]):
+            if not node:
+                out.append('#'); return
+            out.append(str(node.val))
+            dfs(node.left); dfs(node.right)
+        dfs(root)
+        return ','.join(out)
+
+    def deserialize(self, data: str) -> Optional[TreeNode]:
+        it = iter(data.split(','))
+        def build() -> Optional[TreeNode]:
+            v = next(it)
+            if v == '#': return None
+            node = TreeNode(int(v))
+            node.left = build()
+            node.right = build()
+            return node
+        return build()
+# Час/пам’ять: O(n).
