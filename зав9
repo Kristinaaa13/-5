@@ -1,0 +1,29 @@
+# 9) Відновити дерево з preorder-рядка (глибина = кількість '-')
+def recoverFromPreorder(traversal: str) -> TreeNode:
+    i, n = 0, len(traversal)
+    stack: List[TreeNode] = []  # стек шляхом до поточного вузла
+
+    def read_int(idx: int) -> Tuple[int, int]:
+        j = idx
+        while j < n and traversal[j].isdigit():
+            j += 1
+        return int(traversal[idx:j]), j
+
+    while i < n:
+        depth = 0
+        while i < n and traversal[i] == '-':
+            depth += 1; i += 1
+        val, i = read_int(i)
+        node = TreeNode(val)
+        # забезпечити, що стек розміром == depth (батько на вершині)
+        while len(stack) > depth:
+            stack.pop()
+        if stack:
+            parent = stack[-1]
+            if not parent.left:
+                parent.left = node
+            else:
+                parent.right = node
+        stack.append(node)
+    return stack[0] if stack else None
+# O(n) часу (кожен символ читаємо один раз), O(h) пам’яті.
