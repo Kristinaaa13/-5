@@ -1,0 +1,6 @@
+# 3) Інвертувати бінарне дерево
+def invertTree(root: Optional[TreeNode]) -> Optional[TreeNode]:
+    if not root: return None
+    root.left, root.right = invertTree(root.right), invertTree(root.left)
+    return root
+# O(n)/O(h).
