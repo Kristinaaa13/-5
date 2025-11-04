@@ -1,0 +1,18 @@
+# 7) Камери бінарного дерева (жадібний DFS: 0=потребує, 1=має камеру, 2=покритий)
+def minCameraCover(root: TreeNode) -> int:
+    cams = 0
+    NEED, HAS, OK = 0, 1, 2
+
+    def dfs(node: Optional[TreeNode]) -> int:
+        nonlocal cams
+        if not node: return OK
+        L, R = dfs(node.left), dfs(node.right)
+        if L == NEED or R == NEED:
+            cams += 1
+            return HAS
+        if L == HAS or R == HAS:
+            return OK
+        return NEED
+
+    return cams + (dfs(root) == NEED)
+# O(n)/O(h).
